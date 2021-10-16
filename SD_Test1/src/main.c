@@ -1,10 +1,23 @@
 #include "msp.h"
+#include <gpio.h>
+#include <timers.h>
 
 
 /**
  * main.c
  */
+
+// Globals
+
+
+
 void main(void)
 {
-	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
+        Init_Ports();
+        Init_Timers();
+
+        while(1){
+
+            ;
+        }
 }
