@@ -17,7 +17,7 @@
 // Initialize Timers
 void Init_Timers(void){
     Init_TimerA2(TIMERA2_PERIOD);
-    Init_TimerA0(MOTOR_PWM_PERIOD, LEFT_FORWARD_SLOW, RIGHT_FORWARD_SLOW);  // Set the initial period and duty cycle of the motors
+    Init_TimerA0(MOTOR_PWM_PERIOD, LEFT_OFF, RIGHT_OFF);  // Set the initial period and duty cycle of the motors
 }
 
 
@@ -26,10 +26,10 @@ void Init_TimerA0(uint16_t period, uint16_t duty_left, uint16_t duty_right)
     TIMER_A0->CCTL[0] = 0x0080; // CCI0 toggle
     TIMER_A0->CCR[0] = period; // Period is 2*period*8*83.33ns is 1.333*period
     TIMER_A0->EX0 = 0x0000; // divide by 1
-    TIMER_A0->CCTL[3] = 0x0040; // CCR1 toggle/reset
-    TIMER_A0->CCR[3] = duty_right; // CCR1 duty cycle is duty1/period
-    TIMER_A0->CCTL[4] = 0x0040; // CCR2 toggle/reset
-    TIMER_A0->CCR[4] = duty_left; // CCR2 duty cycle is duty2/period
+    TIMER_A0->CCTL[3] = 0x0040; // CCR3 toggle/reset
+    TIMER_A0->CCR[3] = duty_right; // CCR3 duty cycle is duty_right/period
+    TIMER_A0->CCTL[4] = 0x0040; // CCR4 toggle/reset
+    TIMER_A0->CCR[4] = duty_left; // CCR4 duty cycle is duty_left/period
     TIMER_A0->CTL = 0x02B0; // SMCLK=3MHz, divide by 4, up-down mode
 }
 

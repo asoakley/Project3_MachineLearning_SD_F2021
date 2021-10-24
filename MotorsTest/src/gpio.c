@@ -6,7 +6,7 @@ void Init_Ports(){
     Init_Port2();
     Init_Port3();
 //    Init_Port4();
-  //  Init_Port5();
+    Init_Port5();
     //Init_Port6();
 }
 
@@ -49,8 +49,8 @@ void Init_Port1(void){
 void Init_Port2(void){
     // P2.0, P2.1, P2.2 RGB LED
 
-    P2SEL0 &= ~(RGB_RED | RGB_BLUE | RGB_GREEN);
-    P2SEL1 &= ~(RGB_RED | RGB_BLUE | RGB_GREEN);
+    P2SEL0 &= ~(RGB_RED | RGB_BLUE | RGB_GREEN);        // GPIO function
+    P2SEL1 &= ~(RGB_RED | RGB_BLUE | RGB_GREEN);        // GPIO function
     P2DIR |= (RGB_RED | RGB_BLUE | RGB_GREEN);
     P2OUT &= ~(RGB_RED | RGB_BLUE | RGB_GREEN);
 
@@ -84,5 +84,46 @@ void Init_Port3(void){
     // P3.6
 
     // P3.7
+
+}
+
+void Init_Port4(void){
+    // P4.0
+
+    // P4.1
+
+    // P4.2
+
+    // P4.3
+
+    // P4.4
+
+    // P4.5
+
+    // P4.6
+
+    // P4.7
+
+}
+
+void Init_Port5(void){
+    // P5.0
+
+    // P5.1
+
+    // P5.2
+
+    // P5.3
+
+    // P5.4 and P5.5: Left and Right Motor Direction
+
+    P5SEL0 &= ~(LDIR | RDIR);       // GPIO function
+    P5SEL1 &= ~(LDIR | RDIR);       // GPIO function
+    P5DIR |= (LDIR | RDIR);
+    P5OUT &= ~(LDIR | RDIR);        // Forward direction
+
+    // P5.6
+
+    // P5.7
 
 }

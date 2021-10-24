@@ -18,11 +18,11 @@
 #define SW2             BIT4
 
 //Port 2
-#define RGB_RED        BIT0
-#define RGB_BLUE       BIT1
-#define RGB_GREEN      BIT2
-#define PWM_RIGHT      BIT6
-#define PWM_LEFT       BIT7
+#define RGB_RED         BIT0
+#define RGB_BLUE        BIT1
+#define RGB_GREEN       BIT2
+#define PWM_RIGHT       BIT6
+#define PWM_LEFT        BIT7
 
 
 //Port 3
@@ -32,6 +32,9 @@
 //Port 4
 
 //Port 5
+
+#define LDIR            BIT4
+#define RDIR            BIT5
 
 
 //Port 7
