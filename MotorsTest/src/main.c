@@ -16,7 +16,7 @@ void main(void)
 {
         Init_Ports();
         Init_Timers();
-        MotorsSimple(LEFT_SLOW, REVERSE, RIGHT_SLOW, REVERSE);
+        MotorsSimple(LEFT_OFF, FORWARD, RIGHT_OFF, FORWARD);
 
         while(1){
 
