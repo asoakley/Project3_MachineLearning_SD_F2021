@@ -45,6 +45,8 @@
 #define BUMP4           BIT6
 #define BUMP5           BIT7
 
+#define BUMP_ALL        (BIT0 | BIT2 | BIT3 | BIT5 | BIT6 | BIT7)
+
 //Port 5
 
 #define LDIR            BIT4
