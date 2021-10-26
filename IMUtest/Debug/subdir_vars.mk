@@ -14,11 +14,7 @@ SYSCFG_SRCS += \
 C_SRCS += \
 ../bmi160_support.c \
 ../i2cbmi160.c \
-./syscfg/ti_drivers_config.c \
 ../main_tirtos.c 
-
-GEN_FILES += \
-./syscfg/ti_drivers_config.c 
 
 GEN_MISC_DIRS += \
 ./syscfg/ 
@@ -26,18 +22,15 @@ GEN_MISC_DIRS += \
 C_DEPS += \
 ./bmi160_support.d \
 ./i2cbmi160.d \
-./syscfg/ti_drivers_config.d \
 ./main_tirtos.d 
 
 OBJS += \
 ./bmi160_support.obj \
 ./i2cbmi160.obj \
-./syscfg/ti_drivers_config.obj \
 ./main_tirtos.obj 
 
 GEN_MISC_FILES += \
-./syscfg/ti_drivers_config.h \
-./syscfg/syscfg_c.rov.xs 
+./syscfg/error.h 
 
 GEN_MISC_DIRS__QUOTED += \
 "syscfg\" 
@@ -45,26 +38,19 @@ GEN_MISC_DIRS__QUOTED += \
 OBJS__QUOTED += \
 "bmi160_support.obj" \
 "i2cbmi160.obj" \
-"syscfg\ti_drivers_config.obj" \
 "main_tirtos.obj" 
 
 GEN_MISC_FILES__QUOTED += \
-"syscfg\ti_drivers_config.h" \
-"syscfg\syscfg_c.rov.xs" 
+"syscfg\error.h" 
 
 C_DEPS__QUOTED += \
 "bmi160_support.d" \
 "i2cbmi160.d" \
-"syscfg\ti_drivers_config.d" \
 "main_tirtos.d" 
-
-GEN_FILES__QUOTED += \
-"syscfg\ti_drivers_config.c" 
 
 C_SRCS__QUOTED += \
 "../bmi160_support.c" \
 "../i2cbmi160.c" \
-"./syscfg/ti_drivers_config.c" \
 "../main_tirtos.c" 
 
 SYSCFG_SRCS__QUOTED += \

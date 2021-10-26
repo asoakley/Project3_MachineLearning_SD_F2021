@@ -6,22 +6,21 @@ SHELL = cmd.exe
 
 CG_TOOL_ROOT := C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS
 
-GEN_OPTS__FLAG := --cmd_file="C:/Users/alecb/workspace_v10/tirtos_builds_MSP_EXP432P401R_release_ccs/Debug/configPkg/compiler.opt" 
-GEN_CMDS__FLAG := -l"C:/Users/alecb/workspace_v10/tirtos_builds_MSP_EXP432P401R_release_ccs/Debug/configPkg/linker.cmd" 
+GEN_OPTS__FLAG := 
+GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
 "./bmi160_support.obj" \
 "./i2cbmi160.obj" \
-"./syscfg/ti_drivers_config.obj" \
 "./main_tirtos.obj" \
 "../MSP_EXP432P401R_TIRTOS.cmd" \
--l"C:/Users/alecb/Downloads/sail_1_50_00_00__all/sail_1_50_00_00/source/ti/sail/lib/ccs/msp432/sail.lib" \
--l"C:/ti/simplelink_msp432p4_sdk_3_40_01_02/source/ti/display/lib/display.aem4f" \
--l"C:/ti/simplelink_msp432p4_sdk_3_40_01_02/source/ti/drivers/lib/drivers_msp432p401x.aem4f" \
--l"C:/ti/simplelink_msp432p4_sdk_3_40_01_02/source/third_party/fatfs/lib/ccs/m4f/fatfs.a" \
--l"C:/ti/simplelink_msp432p4_sdk_3_40_01_02/kernel/tirtos/packages/ti/dpl/lib/dpl_msp432p401x.aem4f" \
+-l"/source/ti/sail/lib/ccs/msp432/sail.lib" \
+-l"/source/ti/display/lib/display.aem4f" \
+-l"/source/ti/drivers/lib/drivers_msp432p401x.aem4f" \
+-l"/source/third_party/fatfs/lib/ccs/m4f/fatfs.a" \
+-l"/kernel/tirtos/packages/ti/dpl/lib/dpl_msp432p401x.aem4f" \
 $(GEN_CMDS__FLAG) \
--l"C:/ti/simplelink_msp432p4_sdk_3_40_01_02/source/ti/devices/msp432p4xx/driverlib/ccs/msp432p4xx_driverlib.lib" \
+-l"/source/ti/devices/msp432p4xx/driverlib/ccs/msp432p4xx_driverlib.lib" \
 -llibc.a \
 
 -include ../makefile.init
@@ -129,52 +128,48 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-i2cbmi160_MSP_EXP432P401R_tirtos_ccs.out \
+IMUtest.out \
 
 EXE_OUTPUTS__QUOTED += \
-"i2cbmi160_MSP_EXP432P401R_tirtos_ccs.out" \
+"IMUtest.out" \
 
 BIN_OUTPUTS += \
-i2cbmi160_MSP_EXP432P401R_tirtos_ccs.hex \
+IMUtest.hex \
 
 BIN_OUTPUTS__QUOTED += \
-"i2cbmi160_MSP_EXP432P401R_tirtos_ccs.hex" \
+"IMUtest.hex" \
 
 
 # All Target
 all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
-	@$(MAKE) --no-print-directory -Onone "i2cbmi160_MSP_EXP432P401R_tirtos_ccs.out"
-
-dependents:
-	-cd C:/Users/alecb/workspace_v10/tirtos_builds_MSP_EXP432P401R_release_ccs/Debug && $(MAKE) all
+	@$(MAKE) --no-print-directory -Onone "IMUtest.out"
 
 # Tool invocations
-i2cbmi160_MSP_EXP432P401R_tirtos_ccs.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) C:/Users/alecb/workspace_v10/tirtos_builds_MSP_EXP432P401R_release_ccs/Debug/tirtos_builds_MSP_EXP432P401R_release_ccs.lib
+IMUtest.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: Arm Linker'
-	"C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=none --define=DeviceFamily_MSP432P401x -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on -z -m"i2cbmi160_MSP_EXP432P401R_tirtos_ccs.map" -i"C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/lib" --diag_wrap=off --display_error_number --warn_sections --xml_link_info="i2cbmi160_MSP_EXP432P401R_tirtos_ccs_linkInfo.xml" --rom_model -o "i2cbmi160_MSP_EXP432P401R_tirtos_ccs.out" $(ORDERED_OBJS)
+	"C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=none --define=DeviceFamily_MSP432P401x -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on -z -m"IMUtest.map" -i"C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/lib" --diag_wrap=off --display_error_number --warn_sections --xml_link_info="IMUtest_linkInfo.xml" --rom_model -o "IMUtest.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
-i2cbmi160_MSP_EXP432P401R_tirtos_ccs.hex: $(EXE_OUTPUTS)
+IMUtest.hex: $(EXE_OUTPUTS)
 	@echo 'Building secondary target: "$@"'
 	@echo 'Invoking: Arm Hex Utility'
-	"C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/bin/armhex" --diag_wrap=off -o "i2cbmi160_MSP_EXP432P401R_tirtos_ccs.hex" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.5.LTS/bin/armhex" --diag_wrap=off -o "IMUtest.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building secondary target: "$@"'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(GEN_MISC_FILES__QUOTED)$(BIN_OUTPUTS__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "bmi160_support.obj" "i2cbmi160.obj" "syscfg\ti_drivers_config.obj" "main_tirtos.obj" 
-	-$(RM) "bmi160_support.d" "i2cbmi160.d" "syscfg\ti_drivers_config.d" "main_tirtos.d" 
+	-$(RM) $(GEN_MISC_FILES__QUOTED)$(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
+	-$(RM) "bmi160_support.obj" "i2cbmi160.obj" "main_tirtos.obj" 
+	-$(RM) "bmi160_support.d" "i2cbmi160.d" "main_tirtos.d" 
 	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)
 	-@echo 'Finished clean'
 	-@echo ' '
 
 .PHONY: all clean dependents
 .SECONDARY:
-C:/Users/alecb/workspace_v10/tirtos_builds_MSP_EXP432P401R_release_ccs/Debug/tirtos_builds_MSP_EXP432P401R_release_ccs.lib:
 
 -include ../makefile.targets
 

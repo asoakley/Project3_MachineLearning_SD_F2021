@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>MotorsTest</name>
+	<name>AudioTest</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -24,4 +24,17 @@
 		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/Clock.c</name>
+			<type>1</type>
+			<locationURI>copy_PARENT/inc/Clock.c</locationURI>
+		</link>
+	</linkedResources>
+	<variableList>
+		<variable>
+			<name>copy_PARENT</name>
+			<value>$%7BTI_PRODUCTS_DIR%7D/tirslk_max_1_00_02</value>
+		</variable>
+	</variableList>
 </projectDescription>

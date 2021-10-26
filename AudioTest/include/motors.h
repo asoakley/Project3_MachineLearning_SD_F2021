@@ -10,10 +10,16 @@
 #ifndef INCLUDE_MOTORS_H_
 #define INCLUDE_MOTORS_H_
 
-#define MOTOR_PWM_PERIOD            7500
+#define MOTOR_PWM_PERIOD            15000   // 10ms period
 
-#define LEFT_SLOW                   1500
-#define RIGHT_SLOW                  1500
+#define LEFT_SLOW                   3000    // 25%
+#define RIGHT_SLOW                  3000    // 25%
+
+#define LEFT_MED                    7500    // 50%
+#define RIGHT_MED                   7500    // 50%
+
+#define LEFT_FAST                   12500    // 75%
+#define RIGHT_FAST                  12500    // 75%
 
 #define LEFT_OFF                    0
 #define RIGHT_OFF                   0

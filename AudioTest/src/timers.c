@@ -21,23 +21,28 @@ void Init_Timers(void){
 }
 
 
+// PWM for Motors
+
 void Init_TimerA0(uint16_t period, uint16_t duty_left, uint16_t duty_right)
 {
     TIMER_A0->CCTL[0] = 0x0080; // CCI0 toggle
-    TIMER_A0->CCR[0] = period; // Period is 2*period*8*83.33ns is 1.333*period
+    TIMER_A0->CCR[0] = period; // Period is (8 / SMCLK)
     TIMER_A0->EX0 = 0x0000; // divide by 1
     TIMER_A0->CCTL[3] = 0x0040; // CCR3 toggle/reset
     TIMER_A0->CCR[3] = duty_right; // CCR3 duty cycle is duty_right/period
     TIMER_A0->CCTL[4] = 0x0040; // CCR4 toggle/reset
     TIMER_A0->CCR[4] = duty_left; // CCR4 duty cycle is duty_left/period
-    TIMER_A0->CTL = 0x02B0; // SMCLK=3MHz, divide by 4, up-down mode
+    TIMER_A0->CTL = 0x02F0; // SMCLK=12MHz, divide by 8, up-down mode
 }
 
+
+// LED Blink
+
 void Init_TimerA2(uint16_t period){
-   TIMER_A2->CTL = 0x0280;      // Set clock source to SMCLK (3 MHZ by default), input clock divider / 4 (0.75 MHZ) (see user guide for details)
+   TIMER_A2->CTL = 0x0280;      // Set clock source to SMCLK (12 MHz), input clock divider / 4 (3MHz) (see user guide for details)
    TIMER_A2->CCTL[0] = 0x0010;   // Capture mode, compare mode, enable CC interrupt, clear CCIFG
    TIMER_A2->CCR[0] = period - 1;   // Set capture compare register value
-   TIMER_A2->EX0 = 0x0005;      // Input clock divider, divide by 6 (125 kHz)
+   TIMER_A2->EX0 = 0x0007;      // Input clock divider, divide by 8 (250KHz)
    //Configure Interrupts
    NVIC_SetPriority(TA2_0_IRQn, 2); //sets interrupt priority for CCTL[0]
        //enable interrupts
@@ -53,7 +58,7 @@ void Init_TimerA2(uint16_t period){
 
 void TA2_0_IRQHandler(void) {
     TIMER_A2->CCTL[0] &= ~BIT0; // Clear flag
-    P2OUT ^= (RGB_RED | RGB_BLUE | RGB_GREEN);
+    P2OUT ^= (RGB_RED | RGB_BLUE | RGB_GREEN);  // Toggle white 3 times a sec (Run interrupt 6 times a second)
 
 }
 
