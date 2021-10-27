@@ -19,8 +19,5 @@ void main(void)
         Init_Timers();
         MotorsSimple(LEFT_OFF, FORWARD, RIGHT_OFF, FORWARD);
 
-        while(1){
-
-            ;
-        }
+        SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;        // Put in low power mode with interrupts enabled
 }

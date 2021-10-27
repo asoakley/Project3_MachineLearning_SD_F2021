@@ -16,6 +16,7 @@
 
 // functions
 
+void Clock_Init48MHz(void);
 void Init_Timers(void);
 void Init_TimerA0(uint16_t period, uint16_t duty_left, uint16_t duty_right);
 void Init_TimerA2(uint16_t period);

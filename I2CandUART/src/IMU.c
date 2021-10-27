@@ -7,6 +7,7 @@
 
 #include "msp.h"
 #include <IMU.h>
+#include <gpio.h>
 
 void Init_I2CB1(void){
     EUSCI_B1->CTLW0 |= UCSWRST;     // Put in reset

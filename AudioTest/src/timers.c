@@ -54,7 +54,7 @@ void Init_TimerA2(uint16_t period){
 
 
 
-// Timer A2
+// Timer A2 Interrupt
 
 void TA2_0_IRQHandler(void) {
     TIMER_A2->CCTL[0] &= ~BIT0; // Clear flag
