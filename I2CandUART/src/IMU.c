@@ -9,7 +9,7 @@
 #include <IMU.h>
 #include <gpio.h>
 
-void Init_I2CB1(void){
+void Init_I2CB1(uint32_t prescale){
     EUSCI_B1->CTLW0 |= UCSWRST;     // Put in reset
 
 
@@ -30,7 +30,7 @@ void Init_I2CB1(void){
     // bits 3-2     UCASTPx = 0; no automatic stop condition after UBC0TBCNT
     // bits 1-0     UCGLITx = 0; deglitch time of 50 ns
 
-    EUSCI_B1->BRW =
+    EUSCI_B1->BRW = prescale; // set to 120 for 100 KHz and set to 30 for 400 KHz
 
     P6SEL0 |= (UCB1SDA | UCB1SCL);     // P6.4, P6.5 SDA and SCL function
     P6SEL1 &= ~(UCB1SDA | UCB1SCL);     // P6.4, P6.5 SDA and SCL function
@@ -39,3 +39,32 @@ void Init_I2CB1(void){
     EUSCI_B1->IE = 0x0000;      // disable all interrupts ???????????
 
 }
+
+void I2CB1_Send1(uint8_t slaveAddr, uint8_t data){
+    while(EUSCI_B1->STATW & UCBBUSY){};
+    EUSCI_B1->I2CSA = slaveAddr;    // Set slave address
+    EUSCI_B1->CTLW0 &= ~UCTXSTP;    // No stop
+    EUSCI_B1->CTLW0 |= (UCTR | UCTXSTT); // Master transmit, start condition
+    while((EUSCI_B1->IFG & UCTXIFG0) == 0){}; // wait for Transmit Interrupt Flag (raised when buffer is empty in master mode)
+    EUSCI_B1->TXBUF = data; // Put byte in the buffer
+    while((EUSCI_B1->IFG & UCTXIFG0) == 0){}; // wait for the Transmit Interrupt Flag again
+    EUSCI_B1->CTLW0 |= UCTXSTP; // Generate Stop condition
+    EUSCI_B1->IFG &= ~UCTXIFG0; // clear UCTXIFG0
+
+}
+
+uint8_t I2C_Recv1(int8_t slaveAddr){
+    int8_t data;
+    while(EUSCI_B1->STATW & UCBBUSY){}; // wait for I2C to be ready
+    EUSCI_B1->CTLW0 |= UCSWRST; // Put module in reset to modify TBCNT
+    EUSCI_B1->TBCNT = 1; // generate STOP after 1 byte
+    EUSCI_B1->CTLW0 &= ~UCSWRST; // Take out of reset
+    EUSCI_B1->I2CSA = slaveAddr; // set slave address
+    EUSCI_B1->CTLW0 &= ~UCTR;    // Put Module in receive mode
+    EUSCI_B1->CTLW0 |= (UCTXSTP | UCTXSTT);
+    while((EUSCI_B1->IFG & UCRXIFG0) == 0){}; // If slave address is wrong, this hangs up!!
+    data = EUSCI_B1->RXBUF; // get data from the slave
+    return data;
+
+}
+
