@@ -123,12 +123,33 @@ void I2C_RecvMultiple(uint8_t slaveAddr, uint8_t *buffer, uint8_t count){
 
 }
 
+bool I2CB1_Error(void){
+    // If NACK
+    if (EUSCI_B1->IFG & UCNACKIFG) {
+        // Send stop condition
+        EUSCI_B1->CTLW0 |= UCTXSTP; // Generate Stop condition
+        // Clear flag
+        EUSCI_B1->IFG &= ~UCNACKIFG;
+        // Error occurred, return true
+        return true;
+    }
+    return false;
+}
+
+
 
 //=======================================================
 // HIGHER LEVEL IMU FUNCTIONS
 //=======================================================
 
-void Init_IMU(void){}
+void Init_IMU(void){
+    Init_I2CB1(IMU_BAUD);
+    // Error checking
+    // Put gyro to sleep
 
-void IMU_read_data(void){}
+}
+
+ACCELXYZ_TYPE IMU_Read_Accel(void){}
+
+void IMU_Read_Error(void){}
 
