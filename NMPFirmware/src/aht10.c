@@ -110,7 +110,7 @@ void i2c_b0_rx(uint8_t slave_address, uint8_t *buffer, uint8_t count){
 
     while(UCB0STAT & UCBUSY); // Wait until bus not busy
 
-    // Select target devuce
+    // Select target device
     UCB0I2CSA = slave_address;
 
     // Send start condition (and take out of transmit mode)

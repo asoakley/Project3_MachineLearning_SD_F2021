@@ -9,6 +9,10 @@
 #include <IMU.h>
 #include <gpio.h>
 
+//=======================================================
+// LOW LEVEL I2C FUNCTIONS
+//=======================================================
+
 void Init_I2CB1(uint32_t prescale){
     EUSCI_B1->CTLW0 |= UCSWRST;     // Put in reset
 
@@ -53,7 +57,35 @@ void I2CB1_Send1(uint8_t slaveAddr, uint8_t data){
 
 }
 
-uint8_t I2C_Recv1(int8_t slaveAddr){
+void I2CB1_SendMultiple(uint8_t slaveAddr, uint8_t *data, uint8_t count){
+    while(EUSCI_B1->STATW & UCBBUSY){};
+    EUSCI_B1->I2CSA = slaveAddr;    // Set slave address
+    EUSCI_B1->CTLW0 &= ~UCTXSTP;    // No stop
+    EUSCI_B1->CTLW0 |= (UCTR | UCTXSTT); // Master transmit, start condition
+
+    while((EUSCI_B1->IFG & UCTXIFG0) == 0){}; // wait for Transmit Interrupt Flag (raised when buffer is empty in master mode)
+
+    while(count > 0){
+
+        EUSCI_B1->TXBUF = *data; // Put byte in the buffer
+        while((EUSCI_B1->IFG & UCTXIFG0) == 0){
+            if(I2CB1_Error()){
+                count = 0; // Done transmitting. Error occurred
+                break;
+            }
+        } // wait for the Transmit Interrupt Flag again
+
+        data++; // Move to next byte in array
+        count--; // One less byte left to send
+
+    }
+
+    EUSCI_B1->CTLW0 |= UCTXSTP; // Generate Stop condition
+    EUSCI_B1->IFG &= ~UCTXIFG0; // clear UCTXIFG0
+
+}
+
+uint8_t I2C_Recv1(uint8_t slaveAddr){
     int8_t data;
     while(EUSCI_B1->STATW & UCBBUSY){}; // wait for I2C to be ready
     EUSCI_B1->CTLW0 |= UCSWRST; // Put module in reset to modify TBCNT
@@ -61,10 +93,42 @@ uint8_t I2C_Recv1(int8_t slaveAddr){
     EUSCI_B1->CTLW0 &= ~UCSWRST; // Take out of reset
     EUSCI_B1->I2CSA = slaveAddr; // set slave address
     EUSCI_B1->CTLW0 &= ~UCTR;    // Put Module in receive mode
-    EUSCI_B1->CTLW0 |= (UCTXSTP | UCTXSTT);
+    EUSCI_B1->CTLW0 |= UCTXSTT; // Send start condition
+
     while((EUSCI_B1->IFG & UCRXIFG0) == 0){}; // If slave address is wrong, this hangs up!!
     data = EUSCI_B1->RXBUF; // get data from the slave
     return data;
 
 }
+
+void I2C_RecvMultiple(uint8_t slaveAddr, uint8_t *buffer, uint8_t count){
+    while(EUSCI_B1->STATW & UCBBUSY){}; // wait for I2C to be ready
+    EUSCI_B1->I2CSA = slaveAddr; // set slave address
+    EUSCI_B1->CTLW0 &= ~UCTR;    // Put Module in receive mode
+    EUSCI_B1->CTLW0 |= UCTXSTT; // Send start condition
+
+    while(!I2CB1_Error() && (count > 0)){
+        // Send stop condition when only one byte left to receive
+        if(count == 1){
+            EUSCI_B1->CTLW0 |= UCTXSTP; // Generate Stop condition
+        }
+
+        while((EUSCI_B1->IFG & UCRXIFG0) == 0){}; // Wait for data
+        *buffer = EUSCI_B1->RXBUF; // get data from the slave
+        buffer++; // Move to next buffer location
+        count--; // One less byte to receive
+
+    } // If slave address is wrong, this hangs up!!
+
+
+}
+
+
+//=======================================================
+// HIGHER LEVEL IMU FUNCTIONS
+//=======================================================
+
+void Init_IMU(void){}
+
+void IMU_read_data(void){}
 
