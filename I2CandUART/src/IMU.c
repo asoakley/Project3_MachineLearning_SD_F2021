@@ -145,11 +145,18 @@ bool I2CB1_Error(void){
 void Init_IMU(void){
     Init_I2CB1(IMU_BAUD);
     // Error checking
-    // Put gyro to sleep
+    // Avoid gyro wake up
+    // Set bandwidth
+    // Set data rate
+    I2CB1_SendMultiple(BMI160_ADDRESS, GYRO_SLEEP, 2);
 
 }
 
-ACCELXYZ_TYPE IMU_Read_Accel(void){}
+void IMU_Read_Accel(void){
+    I2CB1_Send1(BMI160_ADDRESS, ACC_X_LSB);
+    I2C_Recv1(BMI160_ADDRESS);
+
+}
 
 void IMU_Read_Error(void){}
 

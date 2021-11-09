@@ -11,18 +11,21 @@
 #ifndef INCLUDE_IMU_H_
 #define INCLUDE_IMU_H_
 
-//==========
-// Commands
-//==========
+//=======================
+// Commands and Registers
+//=======================
 
+// Slave address
 #define BMI160_ADDRESS          0x69
 
 // Write to this register to change gyroscope operation mode
 #define PMU_TRIGGER             0x6C
+#define DISABLE_GYRO            0x00
 
 // Read this register for errors
 #define ERR_REG                 0x02
 
+// Acceleration Data Registers
 #define ACC_X_LSB               0x12
 #define ACC_X_MSB               0x13
 
@@ -32,6 +35,12 @@
 #define ACC_Z_LSB               0x16
 #define ACC_Z_MSB               0x17
 
+//======================
+// Predefined Data
+//======================
+// Structure: register byte, data byte(s)
+
+unsigned char GYRO_SLEEP[2] = {PMU_TRIGGER, DISABLE_GYRO};
 //======================
 // Baud Rate Prescale
 //======================
@@ -51,13 +60,17 @@ extern uint8_t ucb1_rx_count;
 
 
 
-// Accelerometer values struct
+// Accelerometer buffers
 
-typedef struct{
-    uint16_t x_accel;
-    uint16_t y_accel;
-    uint16_t z_accel;
-} ACCELXYZ_TYPE;
+extern uint16_t *x_accel;
+extern uint16_t x_accel_count;
+
+extern uint16_t *y_accel;
+extern uint16_t y_accel_count;
+
+extern uint16_t *z_accel;
+extern uint16_t z_accel_count;
+
 
 // Function Declarations
 
