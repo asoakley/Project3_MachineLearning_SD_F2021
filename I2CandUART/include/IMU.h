@@ -22,6 +22,11 @@
 #define PMU_TRIGGER             0x6C
 #define DISABLE_GYRO            0x00
 
+// This register triggers operations like softreset, NVM programming, etc
+#define CMD_REG                 0x7E
+
+#define ACCEL_NORMAL            0x11
+
 // Read this register for errors
 #define ERR_REG                 0x02
 
@@ -43,18 +48,6 @@
 #define IMU_BAUD                120
 
 
-
-//======================
-// Data buffers for UART
-//======================
-
-extern uint8_t *ucb1_tx_buffer;
-extern uint8_t ucb1_tx_count;
-extern uint8_t *ucb1_rx_buffer;
-extern uint8_t ucb1_rx_count;
-
-
-
 // Accelerometer buffers
 
 #define ACCEL_BUFFER_SIZE           128
@@ -63,9 +56,9 @@ extern uint8_t ucb1_rx_count;
 
 void Init_I2CB1(uint32_t prescale);
 void I2CB1_Send1(uint8_t slaveAddr, uint8_t data);
-uint8_t I2C_Recv1(uint8_t slaveAddr);
+uint8_t I2CB1_Recv1(uint8_t slaveAddr);
 void I2CB1_SendMultiple(uint8_t slaveAddr, uint8_t *data, uint8_t count);
-void I2C_RecvMultiple(uint8_t slaveAddr, uint8_t regAddr, int8_t *buffer, uint8_t count);
+void I2CB1_RecvMultiple(uint8_t slaveAddr, uint8_t regAddr, int8_t *buffer, uint8_t count);
 bool I2CB1_Error(void);
 
 void Init_IMU(void);

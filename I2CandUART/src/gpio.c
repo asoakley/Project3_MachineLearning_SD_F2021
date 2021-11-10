@@ -32,11 +32,17 @@ void Init_Port1(void){
     NVIC_SetPriority(PORT1_IRQn, 1);    // set interrupt priority, lower number is higher priority
     NVIC_EnableIRQ(PORT1_IRQn);         // enable interrupt
 
-    // P1.2
+    // P1.2 UCA0RXD UART Function
+    P1SEL0 &= ~UCA0TXD;     // Start as GPIO
+    P1SEL1 &= ~UCA0TXD;     // Start as GPIO
+    P1SEL0 |= UCA0RXD;     // Configure port for UART Function
+    P1SEL1 &= ~UCA0RXD;     // Configure port for UART Function
 
 
-    // P1.3
+    // P1.3 UCA0TXD UART Function
 
+    P1SEL0 &= ~UCA0TXD;     // Start as GPIO
+    P1SEL1 &= ~UCA0TXD;     // Start as GPIO
 
     // P1.5
 

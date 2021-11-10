@@ -15,6 +15,8 @@
 //Port 1
 #define RED_LED         BIT0
 #define SW1             BIT1
+#define UCA0RXD         BIT2
+#define UCA0TXD         BIT3
 
 
 #define SW2             BIT4

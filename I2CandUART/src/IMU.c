@@ -26,7 +26,8 @@ extern uint16_t b_index = 0;
 //======================
 // Structure: register byte, data byte(s)
 
-extern unsigned char GYRO_SLEEP[2] = {PMU_TRIGGER, DISABLE_GYRO};
+unsigned char GYRO_SLEEP[2] = {PMU_TRIGGER, DISABLE_GYRO};
+unsigned char ENABLE_ACCEL[2] = {CMD_REG, ACCEL_NORMAL};
 
 //=======================================================
 // LOW LEVEL I2C FUNCTIONS
@@ -104,7 +105,7 @@ void I2CB1_SendMultiple(uint8_t slaveAddr, uint8_t *data, uint8_t count){
 
 }
 
-uint8_t I2C_Recv1(uint8_t slaveAddr){
+uint8_t I2CB1_Recv1(uint8_t slaveAddr){
     int8_t data;
     while(EUSCI_B1->STATW & UCBBUSY){}; // wait for I2C to be ready
     EUSCI_B1->CTLW0 |= UCSWRST; // Put module in reset to modify TBCNT
@@ -120,7 +121,7 @@ uint8_t I2C_Recv1(uint8_t slaveAddr){
 
 }
 
-void I2C_RecvMultiple(uint8_t slaveAddr, uint8_t regAddr, int8_t *buffer, uint8_t count){
+void I2CB1_RecvMultiple(uint8_t slaveAddr, uint8_t regAddr, int8_t *buffer, uint8_t count){
     while(EUSCI_B1->STATW & UCBBUSY){}; // wait for I2C to be ready
     EUSCI_B1->I2CSA = slaveAddr; // set slave address
     EUSCI_B1->CTLW0 |= UCTR;    // Put Module in Transmit mode
@@ -177,6 +178,7 @@ bool I2CB1_Error(void){
 void Init_IMU(void){
     IMU_Clear_Buffers();
     Init_I2CB1(IMU_BAUD);
+    I2CB1_SendMultiple(BMI160_ADDRESS, ENABLE_ACCEL, 2);
     // Error checking
     // Disable gyroscope in the future???
     // Set bandwidth?
@@ -187,7 +189,7 @@ void Init_IMU(void){
 
 void IMU_Read_Accel(void){
     int8_t accel_vals[6];
-    I2C_RecvMultiple(BMI160_ADDRESS, ACC_X_LSB, accel_vals, 6);
+    I2CB1_RecvMultiple(BMI160_ADDRESS, ACC_X_LSB, accel_vals, 6);
     x_accel[b_index] = (int16_t) (accel_vals[0] & (accel_vals[1] << 8)); // Combine X values
     y_accel[b_index] = (int16_t) (accel_vals[2] & (accel_vals[3] << 8)); // Combine Y values
     z_accel[b_index] = (int16_t) (accel_vals[4] & (accel_vals[5] << 8)); // Combine Z values

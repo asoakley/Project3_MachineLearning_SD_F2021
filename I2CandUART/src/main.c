@@ -13,11 +13,12 @@
 
 
 void main(void)
-{
+  {
         Clock_Init48MHz();  // System clock at 48MHz, SMCLK at 12MHz
         Init_Ports();
         Init_Timers();
         Init_IMU();
+        Init_PC_UART();
         MotorsSimple(LEFT_OFF, FORWARD, RIGHT_OFF, FORWARD);   // Initialize motors OFF
 
         while(1){

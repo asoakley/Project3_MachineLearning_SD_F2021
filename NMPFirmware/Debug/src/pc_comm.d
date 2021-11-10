@@ -1,7 +1,7 @@
 # FIXED
 
 src/pc_comm.obj: ../src/pc_comm.c
-src/pc_comm.obj: C:/ti/URC/NMPFirmware/include/pc_comm.h
+src/pc_comm.obj: C:/ti/SD_Fall_2021/NMPFirmware/include/pc_comm.h
 src/pc_comm.obj: C:/ti/ccs1040/ccs/ccs_base/msp430/include/msp430.h
 src/pc_comm.obj: C:/ti/ccs1040/ccs/ccs_base/msp430/include/msp430g2553.h
 src/pc_comm.obj: C:/ti/ccs1040/ccs/ccs_base/msp430/include/in430.h
@@ -12,8 +12,8 @@ src/pc_comm.obj: C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/inclu
 src/pc_comm.obj: C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/linkage.h
 src/pc_comm.obj: C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/sys/cdefs.h
 src/pc_comm.obj: C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/xlocale/_string.h
-src/pc_comm.obj: C:/ti/URC/NMPFirmware/include/gpio_devices.h
-src/pc_comm.obj: C:/ti/URC/NMPFirmware/include/aht10.h
+src/pc_comm.obj: C:/ti/SD_Fall_2021/NMPFirmware/include/gpio_devices.h
+src/pc_comm.obj: C:/ti/SD_Fall_2021/NMPFirmware/include/aht10.h
 src/pc_comm.obj: C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/stdint.h
 src/pc_comm.obj: C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/_stdint40.h
 src/pc_comm.obj: C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/sys/stdint.h
@@ -26,7 +26,7 @@ src/pc_comm.obj: C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/inclu
 
 ../src/pc_comm.c:
 
-C:/ti/URC/NMPFirmware/include/pc_comm.h:
+C:/ti/SD_Fall_2021/NMPFirmware/include/pc_comm.h:
 
 C:/ti/ccs1040/ccs/ccs_base/msp430/include/msp430.h:
 
@@ -48,9 +48,9 @@ C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/sys/cdefs.h:
 
 C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/xlocale/_string.h:
 
-C:/ti/URC/NMPFirmware/include/gpio_devices.h:
+C:/ti/SD_Fall_2021/NMPFirmware/include/gpio_devices.h:
 
-C:/ti/URC/NMPFirmware/include/aht10.h:
+C:/ti/SD_Fall_2021/NMPFirmware/include/aht10.h:
 
 C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/stdint.h:
 

@@ -6,7 +6,7 @@ src/aht10.obj: C:/ti/ccs1040/ccs/ccs_base/msp430/include/msp430g2553.h
 src/aht10.obj: C:/ti/ccs1040/ccs/ccs_base/msp430/include/in430.h
 src/aht10.obj: C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/intrinsics.h
 src/aht10.obj: C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/intrinsics_legacy_undefs.h
-src/aht10.obj: C:/ti/URC/NMPFirmware/include/aht10.h
+src/aht10.obj: C:/ti/SD_Fall_2021/NMPFirmware/include/aht10.h
 src/aht10.obj: C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/stdint.h
 src/aht10.obj: C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/_ti_config.h
 src/aht10.obj: C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/linkage.h
@@ -31,7 +31,7 @@ C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/intrinsics.h:
 
 C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/intrinsics_legacy_undefs.h:
 
-C:/ti/URC/NMPFirmware/include/aht10.h:
+C:/ti/SD_Fall_2021/NMPFirmware/include/aht10.h:
 
 C:/ti/ccs1040/ccs/tools/compiler/ti-cgt-msp430_20.2.5.LTS/include/stdint.h:
 
