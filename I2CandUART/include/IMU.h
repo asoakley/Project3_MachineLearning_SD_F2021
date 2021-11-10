@@ -35,12 +35,7 @@
 #define ACC_Z_LSB               0x16
 #define ACC_Z_MSB               0x17
 
-//======================
-// Predefined Data
-//======================
-// Structure: register byte, data byte(s)
 
-unsigned char GYRO_SLEEP[2] = {PMU_TRIGGER, DISABLE_GYRO};
 //======================
 // Baud Rate Prescale
 //======================
@@ -62,15 +57,7 @@ extern uint8_t ucb1_rx_count;
 
 // Accelerometer buffers
 
-extern uint16_t *x_accel;
-extern uint16_t x_accel_count;
-
-extern uint16_t *y_accel;
-extern uint16_t y_accel_count;
-
-extern uint16_t *z_accel;
-extern uint16_t z_accel_count;
-
+#define ACCEL_BUFFER_SIZE           128
 
 // Function Declarations
 
@@ -78,14 +65,16 @@ void Init_I2CB1(uint32_t prescale);
 void I2CB1_Send1(uint8_t slaveAddr, uint8_t data);
 uint8_t I2C_Recv1(uint8_t slaveAddr);
 void I2CB1_SendMultiple(uint8_t slaveAddr, uint8_t *data, uint8_t count);
-void I2C_RecvMultiple(uint8_t slaveAddr, uint8_t *buffer, uint8_t count);
+void I2C_RecvMultiple(uint8_t slaveAddr, uint8_t regAddr, int8_t *buffer, uint8_t count);
 bool I2CB1_Error(void);
 
 void Init_IMU(void);
 
-ACCELXYZ_TYPE IMU_Read_Accel(void);
+void IMU_Read_Accel(void);
 
 void IMU_Read_Error(void);
+
+void IMU_Clear_Buffers(void);
 
 
 

@@ -8,17 +8,19 @@
 #include <gpio.h>
 #include <motors.h>
 #include <timers.h>
+#include <IMU.h>
 
 void PORT1_IRQHandler(void){
     if(P1IFG & SW1){        // Press SW1 to go forward, turn on LED
         P1IFG &= ~SW1;
-        MotorsSimple(LEFT_SLOW, FORWARD, RIGHT_SLOW, FORWARD);
+        //MotorsSimple(LEFT_SLOW, FORWARD, RIGHT_SLOW, FORWARD);
+        IMU_Read_Accel();
         P1OUT |= RED_LED;
     }
 
     if(P1IFG & SW2){
         P1IFG &= ~SW2;      // Press SW2 to go reverse, turn on LED
-        MotorsSimple(LEFT_SLOW, REVERSE, RIGHT_SLOW, REVERSE);
+        //MotorsSimple(LEFT_SLOW, REVERSE, RIGHT_SLOW, REVERSE);
         P1OUT |= RED_LED;
     }
 }

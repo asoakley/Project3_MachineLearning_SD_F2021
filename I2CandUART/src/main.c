@@ -2,6 +2,7 @@
 #include <gpio.h>
 #include <timers.h>
 #include <motors.h>
+#include <IMU.h>
 
 
 /**
@@ -11,13 +12,17 @@
 // Globals
 
 
-
 void main(void)
 {
         Clock_Init48MHz();  // System clock at 48MHz, SMCLK at 12MHz
         Init_Ports();
         Init_Timers();
+        Init_IMU();
         MotorsSimple(LEFT_OFF, FORWARD, RIGHT_OFF, FORWARD);   // Initialize motors OFF
 
-        SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;        // Put in low power mode with interrupts enabled
+        while(1){
+
+        }
+
+        //SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;        // Put in low power mode with interrupts enabled
 }

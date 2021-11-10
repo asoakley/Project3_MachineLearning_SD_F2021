@@ -8,6 +8,7 @@
 #include <timers.h>
 #include <motors.h>
 #include <gpio.h>
+#include <IMU.h>
 
 // Globals
 

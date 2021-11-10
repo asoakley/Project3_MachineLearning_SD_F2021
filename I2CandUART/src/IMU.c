@@ -9,6 +9,25 @@
 #include <IMU.h>
 #include <gpio.h>
 
+//===========================
+// Acceleration Value Buffers
+//===========================
+
+extern int16_t x_accel[ACCEL_BUFFER_SIZE] = {0};
+
+extern int16_t y_accel[ACCEL_BUFFER_SIZE] = {0};
+
+extern int16_t z_accel[ACCEL_BUFFER_SIZE] = {0};
+
+extern uint16_t b_index = 0;
+
+//======================
+// Predefined Data
+//======================
+// Structure: register byte, data byte(s)
+
+extern unsigned char GYRO_SLEEP[2] = {PMU_TRIGGER, DISABLE_GYRO};
+
 //=======================================================
 // LOW LEVEL I2C FUNCTIONS
 //=======================================================
@@ -24,7 +43,7 @@ void Init_I2CB1(uint32_t prescale){
     // bit 11       UCMST = 1; master mode
     // bits 10-9    UCMODEx = 3; I2C mode
     // bit 8        UCSYNC = 1; synchronous mode
-    // bit 7-6      UCSSELx = 3; eUSCI clock SMCLK = 3MHz
+    // bit 7-6      UCSSELx = 3; eUSCI clock SMCLK = 12MHz
     // bit 0        UCSWRST = 1;
 
     EUSCI_B1->CTLW1 = 0;
@@ -101,12 +120,25 @@ uint8_t I2C_Recv1(uint8_t slaveAddr){
 
 }
 
-void I2C_RecvMultiple(uint8_t slaveAddr, uint8_t *buffer, uint8_t count){
+void I2C_RecvMultiple(uint8_t slaveAddr, uint8_t regAddr, int8_t *buffer, uint8_t count){
     while(EUSCI_B1->STATW & UCBBUSY){}; // wait for I2C to be ready
     EUSCI_B1->I2CSA = slaveAddr; // set slave address
-    EUSCI_B1->CTLW0 &= ~UCTR;    // Put Module in receive mode
+    EUSCI_B1->CTLW0 |= UCTR;    // Put Module in Transmit mode
     EUSCI_B1->CTLW0 |= UCTXSTT; // Send start condition
 
+    // Must perform a write operation to the desired register before reading data
+    // Register address will automatically increment
+    // Can read data from multiple registers in succession
+
+    while((EUSCI_B1->IFG & UCTXIFG0) == 0){}; // wait for Transmit Interrupt Flag (raised when buffer is empty in master mode)
+    EUSCI_B1->TXBUF = regAddr;
+    while((EUSCI_B1->IFG & UCTXIFG0) == 0){}; // wait for the Transmit Interrupt Flag again
+    EUSCI_B1->IFG &= ~UCTXIFG0; // clear UCTXIFG0
+
+    EUSCI_B1->CTLW0 &= ~UCTR;    // Put Module in receive mode to start reading
+    EUSCI_B1->CTLW0 |= UCTXSTT; // Send another start condition
+
+    // Loop for reading multiple bytes
     while(!I2CB1_Error() && (count > 0)){
         // Send stop condition when only one byte left to receive
         if(count == 1){
@@ -143,20 +175,33 @@ bool I2CB1_Error(void){
 //=======================================================
 
 void Init_IMU(void){
+    IMU_Clear_Buffers();
     Init_I2CB1(IMU_BAUD);
     // Error checking
-    // Avoid gyro wake up
-    // Set bandwidth
-    // Set data rate
-    I2CB1_SendMultiple(BMI160_ADDRESS, GYRO_SLEEP, 2);
+    // Disable gyroscope in the future???
+    // Set bandwidth?
+    // Set data rate?
+    // I2CB1_SendMultiple(BMI160_ADDRESS, GYRO_SLEEP, 2);
 
 }
 
 void IMU_Read_Accel(void){
-    I2CB1_Send1(BMI160_ADDRESS, ACC_X_LSB);
-    I2C_Recv1(BMI160_ADDRESS);
-
+    int8_t accel_vals[6];
+    I2C_RecvMultiple(BMI160_ADDRESS, ACC_X_LSB, accel_vals, 6);
+    x_accel[b_index] = (int16_t) (accel_vals[0] & (accel_vals[1] << 8)); // Combine X values
+    y_accel[b_index] = (int16_t) (accel_vals[2] & (accel_vals[3] << 8)); // Combine Y values
+    z_accel[b_index] = (int16_t) (accel_vals[4] & (accel_vals[5] << 8)); // Combine Z values
+    b_index++;
+    b_index &= (ACCEL_BUFFER_SIZE - 1);
 }
 
 void IMU_Read_Error(void){}
 
+void IMU_Clear_Buffers(void){
+    uint16_t i;
+    for(i = 0; i < ACCEL_BUFFER_SIZE; i++){
+        x_accel[i] = 0;
+        y_accel[i] = 0;
+        z_accel[i] = 0;
+    }
+}
