@@ -27,6 +27,22 @@
 
 #define ACCEL_NORMAL            0x11
 
+// This register is used to configure the accelerometer filter bandwidth and data rate
+#define ACC_CONF                0x40
+
+#define ACC_DR                 0x2C    // Disable undersampling, default bandwidth, 1600 Hz output data rate
+
+// This register is used to configure the g-range
+#define ACC_RANGE               0x41
+
+#define RANGE_2G                0x03
+
+#define RANGE_4G                0x05
+
+#define RANGE_8G                0x08
+
+#define RANGE_16G               0x0A
+
 // Read this register for errors
 #define ERR_REG                 0x02
 

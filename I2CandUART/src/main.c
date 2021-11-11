@@ -3,6 +3,8 @@
 #include <timers.h>
 #include <motors.h>
 #include <IMU.h>
+#include <PC_comm.h>
+#include <Clock.h>
 
 
 /**
@@ -22,7 +24,7 @@ void main(void)
         MotorsSimple(LEFT_OFF, FORWARD, RIGHT_OFF, FORWARD);   // Initialize motors OFF
 
         while(1){
-
+            Print_Accel();
         }
 
         //SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;        // Put in low power mode with interrupts enabled

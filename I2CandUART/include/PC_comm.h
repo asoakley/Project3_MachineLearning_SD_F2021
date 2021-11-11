@@ -25,5 +25,6 @@ extern uint8_t ucb1_rx_count;
 
 void Init_PC_UART(void);
 void Send_String_To_PC(const char *message);
+void Print_Accel(void);
 
 #endif /* INCLUDE_PC_COMM_H_ */

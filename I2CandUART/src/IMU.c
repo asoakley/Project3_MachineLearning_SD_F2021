@@ -8,6 +8,7 @@
 #include "msp.h"
 #include <IMU.h>
 #include <gpio.h>
+#include <Clock.h>
 
 //===========================
 // Acceleration Value Buffers
@@ -28,6 +29,8 @@ extern uint16_t b_index = 0;
 
 unsigned char GYRO_SLEEP[2] = {PMU_TRIGGER, DISABLE_GYRO};
 unsigned char ENABLE_ACCEL[2] = {CMD_REG, ACCEL_NORMAL};
+unsigned char SET_DATARATE[2] = {ACC_CONF, ACC_DR}; // Disable undersampling, default bandwidth, 1600 Hz output data rate
+unsigned char SET_RANGE[2] = {ACC_RANGE, RANGE_2G};
 
 //=======================================================
 // LOW LEVEL I2C FUNCTIONS
@@ -150,6 +153,7 @@ void I2CB1_RecvMultiple(uint8_t slaveAddr, uint8_t regAddr, int8_t *buffer, uint
         *buffer = EUSCI_B1->RXBUF; // get data from the slave
         buffer++; // Move to next buffer location
         count--; // One less byte to receive
+        EUSCI_B1->IFG &= ~UCRXIFG0; // clear UCRXIFG0
 
     } // If slave address is wrong, this hangs up!!
 
@@ -179,6 +183,9 @@ void Init_IMU(void){
     IMU_Clear_Buffers();
     Init_I2CB1(IMU_BAUD);
     I2CB1_SendMultiple(BMI160_ADDRESS, ENABLE_ACCEL, 2);
+    I2CB1_SendMultiple(BMI160_ADDRESS, SET_DATARATE, 2);
+    I2CB1_SendMultiple(BMI160_ADDRESS, SET_RANGE, 2);
+    //Clock_Delay1ms(4);  // Delay 4ms for startup
     // Error checking
     // Disable gyroscope in the future???
     // Set bandwidth?

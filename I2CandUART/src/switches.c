@@ -14,7 +14,6 @@ void PORT1_IRQHandler(void){
     if(P1IFG & SW1){        // Press SW1 to go forward, turn on LED
         P1IFG &= ~SW1;
         //MotorsSimple(LEFT_SLOW, FORWARD, RIGHT_SLOW, FORWARD);
-        IMU_Read_Accel();
         P1OUT |= RED_LED;
     }
 

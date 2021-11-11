@@ -8,7 +8,25 @@
 #include "msp.h"
 #include <PC_comm.h>
 #include <gpio.h>
+#include <IMU.h>
 #include <string.h>
+#include <stdio.h>
+
+//=============
+// Globals
+//=============
+
+extern int16_t x_accel[ACCEL_BUFFER_SIZE];
+
+extern int16_t y_accel[ACCEL_BUFFER_SIZE];
+
+extern int16_t z_accel[ACCEL_BUFFER_SIZE];
+
+extern uint16_t b_index;
+
+//==========================
+// Initialize EUSCI_A0 UART
+//==========================
 
 void Init_PC_UART(void){
     EUSCI_A0->CTLW0 |= UCSWRST; // Put module in reset for configuration
@@ -33,4 +51,11 @@ void Send_String_To_PC(const char *message){
         while (!(EUSCI_A0->IFG & UCTXIFG)); // Wait for current TX to finish
         EUSCI_A0->TXBUF = message[i];
     }
+}
+
+void Print_Accel(void){
+    char temp_str[40];
+    IMU_Read_Accel();
+    sprintf(temp_str, "X = %5d  ,  Y = %5d  ,  Z = %5d\r\n", x_accel[b_index], y_accel[b_index], z_accel[b_index]);
+    Send_String_To_PC(temp_str);
 }
