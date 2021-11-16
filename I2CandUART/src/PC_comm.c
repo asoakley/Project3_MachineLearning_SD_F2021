@@ -56,6 +56,6 @@ void Send_String_To_PC(const char *message){
 void Print_Accel(void){
     char temp_str[40];
     IMU_Read_Accel();
-    sprintf(temp_str, "X = %5d  ,  Y = %5d  ,  Z = %5d\r\n", x_accel[b_index], y_accel[b_index], z_accel[b_index]);
+    sprintf(temp_str, "X = %d  ,  Y = %d  ,  Z = %d\r\n", x_accel[b_index], y_accel[b_index], z_accel[b_index]);
     Send_String_To_PC(temp_str);
 }

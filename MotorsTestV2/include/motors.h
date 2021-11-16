@@ -1,5 +1,4 @@
 /*
- * MotorsTest
  * motors.h
  *
  *  Created on: Oct 20, 2021
@@ -28,10 +27,14 @@
 #define FORWARD                     1
 #define REVERSE                     0
 
+#define CLOCKWISE                   1
+#define COUNTERCLOCKWISE            0
+
 
 // Functions
 
 void MotorsSimple(uint16_t leftSpeed, char leftDirection, uint16_t rightSpeed, char rightDirection);
-
+void SpinInPlace(uint16_t duration, uint16_t speed, uint16_t direction);
+void TriangleFSM(void);
 
 #endif /* INCLUDE_MOTORS_H_ */

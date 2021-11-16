@@ -29,7 +29,7 @@ void Init_Port1(void){
     P1IFG &= ~(SW1 | SW2); // Clear all P1.1 and P1.4 interrupt flags
     P1IE |= (SW1 | SW2); // P1.1 and P1.4 interrupt enabled
 
-    NVIC_SetPriority(PORT1_IRQn, 1);    // set interrupt priority, lower number is higher priority
+    NVIC_SetPriority(PORT1_IRQn, 3);    // set interrupt priority, lower number is higher priority
     NVIC_EnableIRQ(PORT1_IRQn);         // enable interrupt
 
     // P1.2 UCA0RXD UART Function
@@ -105,7 +105,7 @@ void Init_Port4(void){
     P4IFG &= ~(BUMPS_ALL);      // Clear all P4 interrupt flags
     P4IE |= (BUMPS_ALL);
 
-    NVIC_SetPriority(PORT4_IRQn, 1);    // sets interrupt priority
+    NVIC_SetPriority(PORT4_IRQn, 3);    // sets interrupt priority
     NVIC_EnableIRQ(PORT4_IRQn);         // enable interrupts
 
     // P4.1
