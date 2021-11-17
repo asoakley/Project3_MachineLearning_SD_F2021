@@ -13,31 +13,32 @@
 // Globals
 //=================
 
-extern volatile uint16_t TA2_CCR2_Count;
-extern volatile enum {Idle, Delay, Edge1, Corner1, Edge2, Corner2, Edge3,Done} triangle_state;
-
+extern volatile enum {IdleT, DelayT, Edge1, Corner1, Edge2, Corner2, Edge3, Corner3, DoneT} triangle_state;
+extern volatile enum {Idle8, Delay8, Straight1, LeftTurn, Straight2, RightTurn, Done8} figure8_state;
 
 //==========================
 // Button Switch Interrupts
 //==========================
 
 void PORT1_IRQHandler(void){
-    if(P1IFG & SW1){        // Press SW1 to go forward, turn on LED
-        P4IE &= ~SW1;
+    if(P1IFG & SW1){
+        P1IE &= ~SW1;
         P1IFG &= ~SW1;
-        TIMER_A2->CCTL[2] &= ~CCIFG;
-        //MotorsSimple(LEFT_SLOW, FORWARD, RIGHT_SLOW, FORWARD);
-        triangle_state = Delay;
+        TIMER_A2->CCTL[1] &= ~CCIFG;
+        triangle_state = DelayT;
         P1OUT |= RED_LED;
-        TIMER_A2->CCR[2] = TA2R + TIMERA2_PERIOD;
-        TIMER_A2->CCTL[2] |= CCIE;   // Capture mode, compare mode, enable CC interrupt
+        TIMER_A2->CCR[1] = TA2R + TIMERA2_PERIOD;
+        TIMER_A2->CCTL[1] |= CCIE;   // Capture mode, compare mode, enable CC interrupt
     }
 
     if(P1IFG & SW2){
-        P4IE &= ~SW2;
-        P1IFG &= ~SW2;      // Press SW2 to go reverse, turn on LED
-        //MotorsSimple(LEFT_SLOW, REVERSE, RIGHT_SLOW, REVERSE);
-
+        P1IE &= ~SW2;
+        P1IFG &= ~SW2;
+        TIMER_A2->CCTL[2] &= ~CCIFG;
+        figure8_state = Delay8;
+        P1OUT |= RED_LED;
+        TIMER_A2->CCR[2] = TA2R + TIMERA2_PERIOD;
+        TIMER_A2->CCTL[2] |= CCIE;   // Capture mode, compare mode, enable CC interrupt
     }
 }
 

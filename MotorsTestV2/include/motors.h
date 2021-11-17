@@ -34,7 +34,8 @@
 // Functions
 
 void MotorsSimple(uint16_t leftSpeed, char leftDirection, uint16_t rightSpeed, char rightDirection);
-void SpinInPlace(uint16_t duration, uint16_t speed, uint16_t direction);
+void MotorsTimed(uint16_t duration, uint16_t leftspeed, char leftdirection, uint16_t rightspeed, char rightdirection);
 void TriangleFSM(void);
+void Figure8FSM(void);
 
 #endif /* INCLUDE_MOTORS_H_ */
