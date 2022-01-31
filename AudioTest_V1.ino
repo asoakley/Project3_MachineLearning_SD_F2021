@@ -1,7 +1,7 @@
 #include <SimpleRSLK.h> 
 
-#define MIC_PWR   5
-#define MIC_OUT   6
+#define MIC_PWR   5   /*RLSK Pin P4.1, BoosterPack(Energia) Pin J1-5*/
+#define MIC_OUT   6   /*RSLK Pin P4.3, BoosterPack(Energia) Pin J1-6*/
 
 
 void setup() {
