@@ -7,7 +7,7 @@
 #define OSCILLATE           2
 
 const int bmi160_i2c_addr = 0x69;
-const int bmi160_interrupt_pin = 57;
+const int bmi160_interrupt_pin = 5;
 
 int timerCounter = 0; /*Counter for the motor state machine*/
 int motorState = IDLE_STATE;
