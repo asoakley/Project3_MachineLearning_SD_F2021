@@ -81,6 +81,13 @@ void waitBtnPressed() {
   }
 }
 
+void led(){
+  digitalWrite(LED_FR_PIN, !digitalRead(LED_FR_PIN));
+  digitalWrite(LED_FL_PIN, !digitalRead(LED_FL_PIN));
+  digitalWrite(LED_BR_PIN, !digitalRead(LED_BR_PIN));
+  digitalWrite(LED_BR_PIN, !digitalRead(LED_BL_PIN));
+}
+
 void getAcceleration() {
   int xRaw, yRaw, zRaw;
   float x, y, z;
@@ -109,9 +116,7 @@ float convertRawAccel(int gRaw) {
   // since we are using 4G range
   // -4 maps to a raw value of -32768
   // +4 maps to a raw value of 32767
-
   float g = (gRaw * 40) / 32768.0;
-
   return g;
 }
 
@@ -134,10 +139,7 @@ void updateMotors(){
 
 void predict() {
   // Turn off LEDs
-  digitalWrite(LED_FR_PIN, LOW);
-  digitalWrite(LED_FL_PIN, LOW);
-  digitalWrite(LED_BR_PIN, LOW);
-  digitalWrite(LED_BL_PIN, LOW);
+  led();
   digitalWrite(LP_RGB_LED_BLUE_PIN, LOW);
   digitalWrite(LP_RGB_LED_BLUE_PIN, LOW);
   digitalWrite(LP_RGB_LED_BLUE_PIN, LOW);
@@ -146,9 +148,9 @@ void predict() {
   // Prepare for program to start
   Serial.println("\nStarting inferencing in 3 seconds...");
   for (i=0; i<3; i++){
-    digitalWrite(LP_RGB_LED_RED_PIN, HIGH);
+    led();
     delay(500);
-    digitalWrite(LP_RGB_LED_RED_PIN, LOW);
+    led();
     delay(500);
   }
 
@@ -181,23 +183,20 @@ void predict() {
   for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
     ei_printf("    %s: %.5f\n", result.classification[ix].label, result.classification[ix].value);
 
-    // Display predictions with RGB LED
+///////////////////// Display predictions with RGB LED /////////////////////
     if (result.classification[ix].label == "Table"){
       digitalWrite(LP_RGB_LED_BLUE_PIN, HIGH);
     }
     else {
       digitalWrite(LP_RGB_LED_GREEN_PIN, HIGH);
     }
+////////////////////////////////////////////////////////////////////////////
   }
-
 }
 
 void loop(){
-  // Show that robot is waiting to start
-  digitalWrite(LED_FR_PIN, HIGH);
-  digitalWrite(LED_FL_PIN, HIGH);
-  digitalWrite(LED_BR_PIN, HIGH);
-  digitalWrite(LED_BL_PIN, HIGH);
+  // Robot is waiting to start
+  led();
   waitBtnPressed();
   
   // Run accelerometer ML algorithm
