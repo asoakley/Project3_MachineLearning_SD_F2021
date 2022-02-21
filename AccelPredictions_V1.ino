@@ -177,21 +177,26 @@ void predict() {
   }
 
   // Print the predictions
+  int check = 0;
+  char pred = "";
   ei_printf("Predictions ");
   ei_printf("(DSP: %d ms., Classification: %d ms., Anomaly: %d ms.): \n",
             result.timing.dsp, result.timing.classification, result.timing.anomaly);
   for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
     ei_printf("    %s: %.5f\n", result.classification[ix].label, result.classification[ix].value);
-
-///////////////////// Display predictions with RGB LED /////////////////////
-    if (result.classification[ix].label == "Table"){
-      digitalWrite(LP_RGB_LED_BLUE_PIN, HIGH);
+    if (result.classification[ix].value > check) {
+      pred = result.classification[ix].label;
+      check = result.classification[ix].value;
     }
-    else {
-      digitalWrite(LP_RGB_LED_GREEN_PIN, HIGH);
-    }
-////////////////////////////////////////////////////////////////////////////
   }
+///////////////////// Display predictions with RGB LED /////////////////////
+  if (pred == "Table"){
+    digitalWrite(LP_RGB_LED_BLUE_PIN, HIGH);
+  }
+  else {
+    digitalWrite(LP_RGB_LED_GREEN_PIN, HIGH);
+  }
+////////////////////////////////////////////////////////////////////////////
 }
 
 void loop(){
