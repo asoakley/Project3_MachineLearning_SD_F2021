@@ -137,9 +137,9 @@ void updateMotors(){
 void predict() {
   // Turn off LEDs
   led();
+  digitalWrite(LP_RGB_LED_RED_PIN, LOW);
   digitalWrite(LP_RGB_LED_BLUE_PIN, LOW);
-  digitalWrite(LP_RGB_LED_BLUE_PIN, LOW);
-  digitalWrite(LP_RGB_LED_BLUE_PIN, LOW);
+  digitalWrite(LP_RGB_LED_GREEN_PIN, LOW);
   delay(500);
 
   // Prepare for program to start
