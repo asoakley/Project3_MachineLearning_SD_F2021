@@ -1,9 +1,6 @@
 /*
-Version 4 of Accelerometer Testing Code
-Switch 1 Enables Motors (Forward)
-Switch 2 Disables Motors
-Accelerometer Sampling Continuously
-
+Version 5 of Accelerometer Testing Code
+2/22/2022
 */
 
 #include <SimpleRSLK.h>    
@@ -20,14 +17,14 @@ Accelerometer Sampling Continuously
 const int bmi160_i2c_addr = 0x69;
 const int bmi160_interrupt_pin = 5;
 
-int timerCounter = 0; /*Counter for the motor state machine*/
+int timerCounter = 0; // Counter for the motor state machine
 volatile int motorState = OFF;
 
 void setup() {
 
   setupRSLK();
 
-  /* Initialize LED pins as outputs */
+  // Initialize LED pins as outputs
   pinMode(LED_FR_PIN, OUTPUT); 
   pinMode(LED_FL_PIN, OUTPUT); 
   pinMode(LED_BR_PIN, OUTPUT); 
@@ -37,10 +34,11 @@ void setup() {
   pinMode(LP_RGB_LED_BLUE_PIN, OUTPUT); 
   pinMode(LP_RGB_LED_GREEN_PIN, OUTPUT);
 
-  /* Initialize LaunchPad buttons as inputs */
+  // Initialize LaunchPad buttons as inputs
   pinMode(LP_S1_PIN, INPUT_PULLUP);
   pinMode(LP_S2_PIN, INPUT_PULLUP);
 
+  // Attach interrupts to the switches
   attachInterrupt(digitalPinToInterrupt(LP_S1_PIN),SW1_ISR, RISING);
   attachInterrupt(digitalPinToInterrupt(LP_S2_PIN),SW2_ISR, RISING);
   
@@ -58,7 +56,7 @@ void setup() {
   BMI160.setAccelerometerRange(4); 
   Serial.println("Initializing IMU device...done.");
 
-  /* Wait two seconds before starting */
+  // Wait two seconds before starting
   delay(2000);
   digitalWrite(LP_RGB_LED_BLUE_PIN, HIGH);
 }
@@ -75,7 +73,7 @@ void loop() {
   gy = convertRawAccel(gyRaw);
   gz = convertRawAccel(gzRaw);
 
-  // display tab-separated gyro x/y/z values
+  // display comma-separated gyro x/y/z values
   Serial.print(gx);
   Serial.print(",");
   Serial.print(gy);
@@ -83,6 +81,7 @@ void loop() {
   Serial.print(gz);
   Serial.println();
 
+  // Delay the loop to control audio sampling rate
   delay(SAMPLE_PERIOD);
   timerCounter++;
   if(timerCounter > (MOTOR_PERIOD / SAMPLE_PERIOD) - 1){  // If motor period is 500 and sample period is 100, motors will change direction every .5 seconds
@@ -91,6 +90,7 @@ void loop() {
   }
 }
 
+// This function converts raw accel data to m/s^2
 float convertRawAccel(int gRaw) {
   // since we are using 4G range
   // -4 maps to a raw value of -32768
@@ -101,6 +101,7 @@ float convertRawAccel(int gRaw) {
   return g;
 }
 
+// Interrupt for SW1 press, cycles through motor states with each press
 void SW1_ISR(){
   motorState = motorState % NUM_STATES;
   motorState++;
@@ -111,20 +112,23 @@ void SW1_ISR(){
   }
 }
 
+// Interrupt for SW2 press, disables motors
 void SW2_ISR(){
   motorState = OFF;
   disableMotor(BOTH_MOTORS);
 }
 
+// Frequency of calls to this function is based on MOTOR_PERIOD
 void timerFunction(){
   updateMotors();
 }
 
+// This function changes the state of the motors based on time and switch inputs 
 void updateMotors(){
   static char toggle = 0;
   
-  setMotorSpeed(BOTH_MOTORS,15);
-  digitalWrite(LP_RGB_LED_RED_PIN, !digitalRead(LP_RGB_LED_RED_PIN));
+  setMotorSpeed(BOTH_MOTORS,15); // Keep motors at constant speed
+  digitalWrite(LP_RGB_LED_RED_PIN, !digitalRead(LP_RGB_LED_RED_PIN)); // Toggle RED
   
   switch(motorState){
     case FORWARD_REVERSE:
