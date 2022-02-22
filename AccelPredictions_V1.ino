@@ -1,5 +1,5 @@
 // Change this include to match the name of your imported Edge Impulse Arduino library
-#include <tutorial_continuous_motion_recognition_inference.h>
+#include <Terrain_Oscillate_inferencing.h>
 
 // RSLK and accelerometer libraries
 #include <SimpleRSLK.h>
@@ -9,10 +9,10 @@ const int bmi160_i2c_addr = 0x69;
 const int bmi160_interrupt_pin = 5;
 
 // Constant defines
-// #define CONVERT_G_TO_MS2    9.810f
+//#define CONVERT_G_TO_MS2    9.810f
 
 // Private variables
-// static bool debug_nn = false; // Set this to true to see e.g. features generated from the raw signal
+static bool debug_nn = false; // Set this to true to see e.g. features generated from the raw signal
 
 // Allocate a buffer here for the values we'll read from the IMU
 float buffer[EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE] = { 0 };
@@ -40,9 +40,6 @@ void setup() {
   // Initialize LaunchPad buttons as inputs
   pinMode(LP_S1_PIN, INPUT_PULLUP);
   pinMode(LP_S2_PIN, INPUT_PULLUP);
-
-  //attachInterrupt(digitalPinToInterrupt(LP_S1_PIN),SW1_ISR, RISING);
-  //attachInterrupt(digitalPinToInterrupt(LP_S2_PIN),SW2_ISR, RISING);
   
   // By default MSP432 has analogRead() set to 10 bits.
   // This Sketch assumes 12 bits. Uncomment to line below to set analogRead()
@@ -75,8 +72,8 @@ void setup() {
 
 void waitBtnPressed() {
   while(1) {
-    if (digitalRead(LEFT_BTN) == 0) break;
-    if (digitalRead(RIGHT_BTN) == 0) break;
+    if (digitalRead(LP_S1_PIN) == 0) break;
+    if (digitalRead(LP_S2_PIN) == 0) break;
     delay(100);
   }
 }
@@ -147,7 +144,7 @@ void predict() {
 
   // Prepare for program to start
   Serial.println("\nStarting inferencing in 3 seconds...");
-  for (i=0; i<3; i++){
+  for (int i=0; i<3; i++){
     led();
     delay(500);
     led();
@@ -177,8 +174,8 @@ void predict() {
   }
 
   // Print the predictions
-  int check = 0;
-  char pred = "";
+  float check = 0.0;
+  String pred = "";
   ei_printf("Predictions ");
   ei_printf("(DSP: %d ms., Classification: %d ms., Anomaly: %d ms.): \n",
             result.timing.dsp, result.timing.classification, result.timing.anomaly);
@@ -196,6 +193,7 @@ void predict() {
   else {
     digitalWrite(LP_RGB_LED_GREEN_PIN, HIGH);
   }
+  delay(1000);
 ////////////////////////////////////////////////////////////////////////////
 }
 
