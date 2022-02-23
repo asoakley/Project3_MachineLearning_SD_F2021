@@ -25,13 +25,11 @@ int counter = 0;
 void setup() {
   
   setupRSLK();
-  disableMotor(BOTH_MOTORS);
+  enableMotor(BOTH_MOTORS);
 
   // Initialize LED pins as outputs
   pinMode(LED_FR_PIN, OUTPUT); 
   pinMode(LED_FL_PIN, OUTPUT); 
-  pinMode(LED_BR_PIN, OUTPUT); 
-  pinMode(LED_BL_PIN, OUTPUT);
   pinMode(LP_RED_LED_PIN, OUTPUT);
   pinMode(LP_RGB_LED_RED_PIN, OUTPUT);
   pinMode(LP_RGB_LED_BLUE_PIN, OUTPUT); 
@@ -81,8 +79,6 @@ void waitBtnPressed() {
 void led(){
   digitalWrite(LED_FR_PIN, !digitalRead(LED_FR_PIN));
   digitalWrite(LED_FL_PIN, !digitalRead(LED_FL_PIN));
-  digitalWrite(LED_BR_PIN, !digitalRead(LED_BR_PIN));
-  digitalWrite(LED_BR_PIN, !digitalRead(LED_BL_PIN));
 }
 
 void getAcceleration() {
@@ -154,7 +150,7 @@ void predict() {
   // get accelerometer data
   Serial.println("Sampling...");
   getAcceleration();
-  disableMotor(BOTH_MOTORS);
+  setMotorSpeed(BOTH_MOTORS,0);
 
   // Turn the raw buffer in a signal which we can the classify
   signal_t signal;
@@ -187,7 +183,7 @@ void predict() {
     }
   }
 ///////////////////// Display predictions with RGB LED /////////////////////
-  if (pred == "Table"){
+  if (pred == "Tile"){
     digitalWrite(LP_RGB_LED_BLUE_PIN, HIGH);
   }
   else {
