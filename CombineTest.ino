@@ -196,6 +196,11 @@ void updateMotors(){
         setMotorDirection(RIGHT_MOTOR, MOTOR_DIR_FORWARD);
       }
       break;
+      
+    case FORWARD:
+        setMotorDirection(LEFT_MOTOR, MOTOR_DIR_FORWARD);
+        setMotorDirection(RIGHT_MOTOR, MOTOR_DIR_FORWARD);
+      break;
     default: break;
   }
   toggle ^= 1;
