@@ -186,8 +186,11 @@ void predict() {
   if (pred == "Tile"){
     digitalWrite(LP_RGB_LED_BLUE_PIN, HIGH);
   }
-  else {
+  if (pred == "Grass"){
     digitalWrite(LP_RGB_LED_GREEN_PIN, HIGH);
+  }
+  if (pred == "Brick") {
+    digitalWrite(LP_RGB_LED_RED_PIN, HIGH);
   }
   delay(1000);
 ////////////////////////////////////////////////////////////////////////////
