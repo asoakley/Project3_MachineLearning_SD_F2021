@@ -1,1 +1,0 @@
-"./src/aht10.obj" "./src/clocks.obj" "./src/gpio_devices.obj" "./src/main.obj" "./src/pc_comm.obj" "../lnk_msp430g2553.cmd" -llibc.a 
