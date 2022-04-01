@@ -2,7 +2,7 @@
 // Continuous forward drive accelerometer classification
 
 // Change this include to match the name of your imported Edge Impulse Arduino library
-#include <TerrainRecognition_inferencing.h>
+#include <TI-ML-Terrain-Recognition_inferencing.h>
 
 // RSLK and accelerometer libraries
 #include <SimpleRSLK.h>
@@ -11,7 +11,8 @@
 const int bmi160_i2c_addr = 0x69;
 const int bmi160_interrupt_pin = 17;
 
-volatile int state = 0;
+volatile int state = 0;   // 0 -> OFF, 1 -> RUN ALGORITHM
+volatile int back = 0;    // If 1, robot will back up after each time running
 
 // Private variables
 static bool debug_nn = false; // Set this to true to see e.g. features generated from the raw signal
@@ -26,8 +27,7 @@ void setup() {
   setupRSLK();
   enableMotor(BOTH_MOTORS);
   setMotorSpeed(BOTH_MOTORS,0);
-  setMotorDirection(LEFT_MOTOR, MOTOR_DIR_FORWARD);
-  setMotorDirection(RIGHT_MOTOR, MOTOR_DIR_FORWARD);
+  setMotorDirection(BOTH_MOTORS, MOTOR_DIR_FORWARD);
 
   // Initialize LED pins as outputs
   pinMode(LED_FR_PIN, OUTPUT); 
@@ -40,7 +40,7 @@ void setup() {
   // Initialize LaunchPad buttons as inputs
   pinMode(LP_S1_PIN, INPUT_PULLUP);
   pinMode(LP_S2_PIN, INPUT_PULLUP);
-  //attachInterrupt(digitalPinToInterrupt(LP_S1_PIN),SW1_ISR, RISING);
+  attachInterrupt(digitalPinToInterrupt(LP_S1_PIN),SW1_ISR, RISING);
   attachInterrupt(digitalPinToInterrupt(LP_S2_PIN),SW2_ISR, RISING);
 
   Serial.begin(115200); // initialize Serial communication
@@ -68,6 +68,13 @@ void setup() {
 
 void SW2_ISR(){
   state = !state;
+  if (state == 0) {
+    setMotorSpeed(BOTH_MOTORS,0);
+  }
+}
+
+void SW1_ISR(){
+  back = !back;
 }
 
 void getAcceleration() {
@@ -147,6 +154,13 @@ void predict() {
   if (pred == "Foam") {
     digitalWrite(LP_RGB_LED_BLUE_PIN, HIGH);
   }
+  if (pred == "Wood") {
+    digitalWrite(LP_RGB_LED_RED_PIN, HIGH);
+    digitalWrite(LP_RGB_LED_BLUE_PIN, HIGH);
+  }
+  if (pred == "Brick") {
+    digitalWrite(LP_RGB_LED_RED_PIN, HIGH);
+  }
 ////////////////////////////////////////////////////////////////////////////
 }
 
@@ -167,5 +181,10 @@ void loop(){
     digitalWrite(LED_FL_PIN, LOW);
     setMotorSpeed(BOTH_MOTORS,15);
     predict();
+    if (back == 1) {
+      setMotorDirection(BOTH_MOTORS, MOTOR_DIR_BACKWARD);
+      delay(1000);
+      setMotorDirection(BOTH_MOTORS, MOTOR_DIR_FORWARD);
+    }
   }
 }
