@@ -4,19 +4,9 @@ Version 2 of Audio Testing Code
 */
 
 #include <SimpleRSLK.h>    
-
-#define OFF                 0
-#define FORWARD_REVERSE     1
-#define OSCILLATE           2
-#define FORWARD             3
-#define NUM_STATES          3
-#define SAMPLE_PERIOD       5 // 5ms for 200 Hz sampling rate
-#define MOTOR_PERIOD        500 // 0.5 seconds
-#define MIC_PWR   5   // RLSK Pin P4.1, BoosterPack(Energia) Pin J1-5
-#define MIC_OUT   6   // RSLK Pin P4.3, BoosterPack(Energia) Pin J1-6
-
-int timerCounter = 0; // Counter for the motor state machine
-volatile int motorState = OFF; // Current state of the motors
+#define MIC_PWR         5   // RLSK Pin P4.1, BoosterPack(Energia) Pin J1-5
+#define MIC_OUT         6   // RSLK Pin P4.3, BoosterPack(Energia) Pin J1-6
+#define SAMPLE_PERIOD   1 // 1ms, 1000 Hz
 
 void setup() {
   
@@ -38,14 +28,6 @@ void setup() {
 
   analogReadResolution(14); //ADC has 14 bits of resolution
   
-  // Initialize LaunchPad buttons as inputs
-  pinMode(LP_S1_PIN, INPUT_PULLUP);
-  pinMode(LP_S2_PIN, INPUT_PULLUP);
-
-  // Attach interrupts to the switches
-  attachInterrupt(digitalPinToInterrupt(LP_S1_PIN),SW1_ISR, RISING);
-  attachInterrupt(digitalPinToInterrupt(LP_S2_PIN),SW2_ISR, RISING);
-  
   Serial.begin(115200); // initialize Serial communication
   while (!Serial);    // wait for the serial port to open
 
@@ -60,72 +42,12 @@ void loop() {
   //Read the analog voltage of the mic output
   audio = analogRead(MIC_OUT);
 
+  if(audio >= 8800 || audio <= 7800) digitalWrite(LP_RED_LED_PIN, HIGH);
+  else digitalWrite(LP_RED_LED_PIN, LOW);
+  
  //Send the data over UART
-  Serial.print(audio); 
-  Serial.println();
+  Serial.println(audio); 
 
   // Delay the loop to control audio sampling rate
   delay(SAMPLE_PERIOD);
-  timerCounter++;
-  if(timerCounter > (MOTOR_PERIOD / SAMPLE_PERIOD) - 1){  // If motor period is 500 and sample period is 100, motors will change direction every .5 seconds
-    timerFunction();  // Calls motor update function
-    timerCounter = 0;
-  }
-}
-
-
-// Interrupt for SW1 press, cycles through motor states with each press
-void SW1_ISR(){
-  motorState = motorState % NUM_STATES;
-  motorState++;
-  enableMotor(BOTH_MOTORS);
-  if(motorState == FORWARD){
-    setMotorDirection(LEFT_MOTOR, MOTOR_DIR_FORWARD);
-    setMotorDirection(RIGHT_MOTOR, MOTOR_DIR_FORWARD);
-  }
-}
-
-// Interrupt for SW2 press, disables motors
-void SW2_ISR(){
-  motorState = OFF;
-  disableMotor(BOTH_MOTORS);
-}
-
-// Frequency of calls to this function is based on MOTOR_PERIOD
-void timerFunction(){
-  updateMotors();
-}
-
-// This function changes the state of the motors based on time and switch inputs 
-void updateMotors(){
-  static char toggle = 0; // Used for periodic direction changes
-  
-  setMotorSpeed(BOTH_MOTORS,15); // Keep motors at constant speed
-  digitalWrite(LP_RGB_LED_RED_PIN, !digitalRead(LP_RGB_LED_RED_PIN)); // Toggle RED
-  
-  switch(motorState){
-    case FORWARD_REVERSE:
-      if(toggle){
-        setMotorDirection(LEFT_MOTOR, MOTOR_DIR_FORWARD);
-        setMotorDirection(RIGHT_MOTOR, MOTOR_DIR_FORWARD);
-      }
-      else{
-        setMotorDirection(LEFT_MOTOR, MOTOR_DIR_BACKWARD);
-        setMotorDirection(RIGHT_MOTOR, MOTOR_DIR_BACKWARD);
-      }
-      break;
-
-    case OSCILLATE:
-      if(toggle){
-        setMotorDirection(LEFT_MOTOR, MOTOR_DIR_FORWARD);
-        setMotorDirection(RIGHT_MOTOR, MOTOR_DIR_BACKWARD);
-      }
-      else{
-        setMotorDirection(LEFT_MOTOR, MOTOR_DIR_BACKWARD);
-        setMotorDirection(RIGHT_MOTOR, MOTOR_DIR_FORWARD);
-      }
-      break;
-    default: break;
-  }
-  toggle ^= 1;
 }
