@@ -1,5 +1,4 @@
-// Change this include to match the name of your imported Edge Impulse Arduino library
-#include <Audio_inferencing.h>
+#include <TI-ML-Audio-Classification_inferencing.h>
 
 // RSLK and accelerometer libraries
 #include <SimpleRSLK.h>
@@ -13,9 +12,7 @@ static bool debug_nn = false; // Set this to true to see e.g. features generated
 // Allocate a buffer here for the values we'll read from the IMU
 float buffer[EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE] = { 0 };
 
-#define SAMPLE_PERIOD    5    // 5 ms, 200 Hz
-
-int counter = 0;
+#define SAMPLE_PERIOD    1    // 1 ms, 1000 Hz
 
 void setup() {
   
@@ -58,7 +55,6 @@ void getAudio() {
     // Add audio data to buffer
     buffer[i] = audio;
     delay(SAMPLE_PERIOD);
-    counter++;
   }
 }
 
@@ -104,22 +100,15 @@ void audioPredict() {
   setMotorSpeed(BOTH_MOTORS,15);
   // Move motors for set time when detecting motion commands
   // If a command is not detected, program immediately runs back through loop
-  if (pred == "Forward"){
-    setMotorDirection(LEFT_MOTOR, MOTOR_DIR_FORWARD);
-    setMotorDirection(RIGHT_MOTOR, MOTOR_DIR_FORWARD);
+  if (pred == "Go"){
+    setMotorDirection(BOTH_MOTORS, MOTOR_DIR_FORWARD);
     delay(1000);
   }
-  if (pred == "Backward"){
-    setMotorDirection(LEFT_MOTOR, MOTOR_DIR_BACKWARD);
-    setMotorDirection(RIGHT_MOTOR, MOTOR_DIR_BACKWARD);
+  if (pred == "Back it up"){
+    setMotorDirection(BOTH_MOTORS, MOTOR_DIR_BACKWARD);
     delay(1000);
   }
-  if (pred == "Left"){
-    setMotorDirection(LEFT_MOTOR, MOTOR_DIR_BACKWARD);
-    setMotorDirection(RIGHT_MOTOR, MOTOR_DIR_FORWARD);
-    delay(1000);
-  }
-  if (pred == "Right"){
+  if (pred == "Clockwise"){
     setMotorDirection(LEFT_MOTOR, MOTOR_DIR_FORWARD);
     setMotorDirection(RIGHT_MOTOR, MOTOR_DIR_BACKWARD);
     delay(1000);
