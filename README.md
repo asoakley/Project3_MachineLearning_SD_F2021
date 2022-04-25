@@ -16,7 +16,6 @@
         <li>MotorsTestV2 contains the program files to make patterns for the robot to perform (figure 8, triangle, etc)</li>
         <li>boostxl_sensors_sensorgui_msp432p401r contains program files for a sensors board GUI from TI's sensors boosterpack</li>
     </ul>
-    
     <li>libraries folder contains the libraries used in Arduino IDE to get the MSP432 microcontroller and the RSLK to function. 
     It also contains some of the Edge Impulse libraries that we have tested</li>
     <li>prediction folder contains the Arduino code for running edge impulse models. 
